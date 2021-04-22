@@ -10,7 +10,7 @@ window.onload = () => {
     const objs = [];
     const count = 1;
 
-    let i, koong;
+    let i;
     for (i = 0; i < count; i++) {
 
     }

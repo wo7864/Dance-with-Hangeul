@@ -49,7 +49,7 @@ class Koong {
         this.ctx.font = `${this.size}px ${FONT}`
         const y = this.y + ((MAX_FONT_SIZE - this.size) * 0.1) // canvas filltext size별로 높이 다른 부분 수정 계수
         this.ctx.fillText('쿵', this.x, y)
-        this.padding.left = this.x + this.padding.value;
+        this.padding.left = this.x + this.padding.value - (this.size/2);
         this.padding.right = this.padding.left + this.size - (this.padding.value * 2);
         this.padding.horizontalCenter = (this.padding.left + this.padding.right) / 2;
         this.padding.top = y - this.size + this.padding.value;
