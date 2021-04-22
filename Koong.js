@@ -1,9 +1,9 @@
-const FONT = 'ChosunGs'
+const FONT = 'Nanum Myeongjo'
 const BOTTOM = window.innerHeight - 45;
 const MAX_FONT_SIZE = 500;
 const MIN_FONT_SIZE = 150;
 const ACC_VALUE = 1;
-const MAX_LIFE = 600;
+const MAX_LIFE = 300;
 
 class Koong {
     ctx;
@@ -33,16 +33,19 @@ class Koong {
             top: 0,
             bottom: 0,
             verticalCenter: 0,
+            visiable:false  // padding 디버깅
         }
 
         this.x = this.x ? this.x : getRandomInt(0, window.innerWidth - this.size);
-        this.y = this.y ? this.y : this.size;
-        this.acc = 0;
+        this.y = this.y ? this.y : 0;
+        this.acc = getRandomInt(5, 15);
         this.horizontal_acc = 0;
         this.life = 0;
     }
 
     draw() {
+        this.ctx.fillStyle = "white";
+        this.ctx.textAlign = 'center';
         this.ctx.font = `${this.size}px ${FONT}`
         const y = this.y + ((MAX_FONT_SIZE - this.size) * 0.1) // canvas filltext size별로 높이 다른 부분 수정 계수
         this.ctx.fillText('쿵', this.x, y)
@@ -52,6 +55,9 @@ class Koong {
         this.padding.top = y - this.size + this.padding.value;
         this.padding.bottom = this.padding.top + this.size - this.padding.value;
         this.padding.verticalCenter = (this.padding.top + this.padding.bottom) / 2;
+
+        if(this.padding.visiable)
+        this.ctx.fillRect(this.padding.left, this.padding.top, this.padding.right - this.padding.left, this.padding.bottom - this.padding.top)
     }
 
     gravity() {
@@ -64,13 +70,6 @@ class Koong {
                 this.acc = this.acc * (-1 / 2)
             }
 
-        } else {
-            if (this.life >= 0) {
-                this.life += 1;
-                if (this.life > MAX_LIFE) {
-                    this.life = -1;
-                }
-            }
         }
     }
 
@@ -78,40 +77,37 @@ class Koong {
 
     horizontalMove() {
         if (this.horizontal_acc > 0) {
-            this.horizontal_acc -= 0.5;
+            this.horizontal_acc -= ACC_VALUE/2;
             this.x += this.horizontal_acc;
-            if (this.x + this.size > window.innerWidth) {
-                this.x = window.innerWidth - this.size;
+            if (this.x + (this.size/2) > window.innerWidth) {
+                this.x = window.innerWidth - (this.size/2);
                 this.horizontal_acc *= (-1 / 2)
             }
         } else if (this.horizontal_acc < 0) {
-            this.horizontal_acc += 0.5;
+            this.horizontal_acc += ACC_VALUE/2;
             this.x += this.horizontal_acc;
-            if (this.x < 0) {
-                this.x = 0;
+            if (this.x < this.size/2) {
+                this.x = this.size/2;
                 this.horizontal_acc *= (-1 / 2)
             }
         }
     }
 
     detect(x, y) {
+
         if (this.padding.left < x &&
             x < this.padding.right &&
             this.padding.top < y &&
             y < this.padding.bottom) {
 
-            const crash = {}
 
             if (this.padding.left < x &&
                 x < this.padding.horizontalCenter) {
                 this.horizontal_acc = 20;
-
-                crash.left = true;
             } else if (this.padding.horizontalCenter < x &&
                 x < this.padding.right) {
                 this.horizontal_acc = -20;
 
-                crash.right = true;
             }
 
             if (this.padding.top < y &&
@@ -120,16 +116,24 @@ class Koong {
             } else if (this.padding.verticalCenter < y &&
                 y < this.padding.bottom) {
                 this.acc = -10;
-                crash.bottom = true;
 
             }
 
-            return crash;
         }
 
         return false;
     }
 
-
+    destory() {
+        if (this.life >= 0) {
+            this.life += 1;
+            if (this.life > MAX_LIFE * 0.9 && this.life < MAX_LIFE) {
+                this.size = this.size * 0.8
+                this.y -= this.size *0.2
+            }else if(this.life > MAX_LIFE){
+                this.life = -1;
+            }
+        }
+    }
 
 }
