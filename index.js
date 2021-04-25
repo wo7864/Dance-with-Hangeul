@@ -8,12 +8,7 @@ window.onload = () => {
     canvas.height = window.innerHeight;
 
     const objs = [];
-    const count = 1;
 
-    let i;
-    for (i = 0; i < count; i++) {
-
-    }
 
 
     let removeList
@@ -22,7 +17,7 @@ window.onload = () => {
         requestAnimationFrame(() => {
              if(cooltime <= 0){
                  if(objs.length<5){
-                     objs.push(new Koong(ctx))
+                     objs.push(new Hangul(ctx))
                      cooltime = getRandomInt(30, 120);
                  }
              }else{
@@ -36,13 +31,9 @@ window.onload = () => {
             objs.forEach((koong, index) => {
                 if (koong.life === -1) removeList.push(index);
 
-                objs.forEach(k => {
+                objs.forEach((k, idx) => {
                     if(k===koong) return;
-                    k.detect(koong.padding.left, koong.padding.top)
-                    k.detect(koong.padding.left, koong.padding.bottom)
-                    k.detect(koong.padding.right, koong.padding.top)
-                    k.detect(koong.padding.right, koong.padding.bottom)
-
+                    detect(koong, k)
                 })
                 koong.gravity();
                 koong.horizontalMove();
@@ -60,14 +51,14 @@ window.onload = () => {
 
 
     // document.addEventListener('click', (e) => {
-    //     koong = new Koong(ctx, e.clientX, e.clientY)
-    //     koong.draw()
-    //     objs.push(koong)
-    // })
+    //      koong = new Hangul(ctx, e.clientX, e.clientY)
+    //      koong.draw()
+    //      objs.push(koong)
+    //  })
 
     document.addEventListener('mousemove', (e) => {
         objs.forEach(koong => {
-            koong.detect(e.clientX, e.clientY)
+            //koong.detect(e.clientX, e.clientY)
         })
     })
 }
