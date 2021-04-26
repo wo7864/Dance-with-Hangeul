@@ -1,5 +1,5 @@
 const FONT = 'Nanum Myeongjo'
-const BOTTOM = window.innerHeight - 45;
+const BOTTOM = window.innerHeight
 const MAX_FONT_SIZE = 500;
 const MIN_FONT_SIZE = 150;
 const ACC_VALUE = 1;
@@ -11,51 +11,90 @@ class Hangul {
     padding;
     x;
     y;
-    acc;
-    horizontal_acc;
-    v
+    y_acc;
+    x_acc;
     life;
-    constructor(ctx, x, y) {
-        this.ctx = ctx;
-        this.x = x;
-        this.y = y;
+    constructor(props) {
+        this.ctx = props.ctx;
 
+        this.groupId = props.groupId
+        
+        this.text = props.text
+        this.fontSize = props.fontSize
+        this.fontFamily = props.fontFamily
+        this.color = props.color
+        this.opacity = props.opacity
+        this.rotate = props.rotate
+
+        this.x = props.x;
+        this.y = props.y;
+        this.x_acc = props.x_acc;
+        this.y_acc = props.y_acc;
+        this.crush_acc = props.crush_acc;
+        this.maxLife = props.life;
+        this.life = props.life;
+
+        /* Function 적용 여부 */
+        this.isWall = props.isWall;
+        this.isDetect = props.isDetect;
+        this.isGravity = props.isGravity;
+        this.isFadeIn = props.isFadeIn;
+        this.isVibe = props.isVibe;
+        this.isRotateDie = props.isRotateDie;
         this.init();
+
+        //this.paddingVisiable = true;
     }
 
     init() {
-        this.size = getRandomInt(MIN_FONT_SIZE, MAX_FONT_SIZE);
         this.paddingVisiable = false
 
-        this.x = this.x ? this.x : getRandomInt(0, window.innerWidth - this.size);
+        this.fontSize = this.fontSize ? this.fontSize : getRandomInt(MIN_FONT_SIZE, MAX_FONT_SIZE);
+        this.x = this.x ? this.x : getRandomInt(this.fontSize / 2, window.innerWidth - this.fontSize / 2);
         this.y = this.y ? this.y : 0;
-        this.acc = getRandomInt(5, 15);
-        this.horizontal_acc = 0;
-        this.life = 0;
+        this.y_acc = this.y_acc ? this.y_acc : getRandomInt(5, 15);
+        this.x_acc = this.x_acc ? this.x_acc : 0;
+        this.life = this.life ? this.life : 300;
     }
 
     draw() {
-        this.ctx.fillStyle = "white";
-        this.ctx.textAlign = 'center';
-        this.ctx.textBaseline = 'middle';
-        this.ctx.font = `${this.size}px ${FONT}`
-        this.ctx.fillText('쿵', this.x, this.y)
+        if (this.isGravity) this.gravity();
+        if (this.isVibe) this.vibe();
+        this.move();
+
+        this.ctx.save();
 
         if (this.paddingVisiable) {
+            this.ctx.fillStyle = "#666";
             this.ctx.beginPath()
-            this.ctx.arc(this.x, this.y, this.size / 2, 0, Math.PI * 2)
+            this.ctx.arc(this.x, this.y, this.fontSize / 2, 0, Math.PI * 2)
             this.ctx.fill();
         }
+
+        this.ctx.fillStyle = this.color;
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.font = `${this.fontSize}px ${this.fontFamily}`
+        this.ctx.translate(this.x, this.y);
+        this.ctx.rotate(this.rotate * Math.PI / 180);
+
+        if (this.isFadeIn) this.fadeIn();
+
+
+        this.ctx.fillText(this.text, 0, 0)
+        this.ctx.restore();
+
+        this.destory();
     }
 
     gravity() {
-        if (BOTTOM > this.y + this.size / (2.5) || this.acc < -1) {
-            this.acc += ACC_VALUE;
-            this.y += this.acc;
+        if (BOTTOM > this.y + this.fontSize / (2) || this.y_acc < -1) {
+            this.y_acc += ACC_VALUE;
+            this.y += this.y_acc;
 
-            if (this.y + this.size / (2.5) >= BOTTOM) {
-                this.y = BOTTOM - this.size / (2.5)
-                this.acc = this.acc * (-1 / 2)
+            if (this.y + this.fontSize / (2) >= BOTTOM) {
+                this.y = BOTTOM - this.fontSize / (2)
+                this.y_acc = this.y_acc * (-1 / 2)
             }
 
         }
@@ -63,35 +102,120 @@ class Hangul {
 
 
 
-    horizontalMove() {
-        if (this.horizontal_acc > 0) {
-            this.horizontal_acc -= ACC_VALUE / 2;
-            this.x += this.horizontal_acc;
-            if (this.x + (this.size / 2) > window.innerWidth) {
-                this.x = window.innerWidth - (this.size / 2);
-                this.horizontal_acc *= (-1 / 2)
+    move() {
+        if (this.x_acc > 0) {
+            this.x_acc -= ACC_VALUE / 2;
+            if (this.x_acc < 1) this.x_acc = 0
+            this.x += this.x_acc;
+
+            if (this.x + (this.fontSize / 2) > window.innerWidth
+                && this.isWall) {
+                this.x = window.innerWidth - (this.fontSize / 2);
+                this.x_acc *= (-1 / 2)
             }
-        } else if (this.horizontal_acc < 0) {
-            this.horizontal_acc += ACC_VALUE / 2;
-            this.x += this.horizontal_acc;
-            if (this.x < this.size / 2) {
-                this.x = this.size / 2;
-                this.horizontal_acc *= (-1 / 2)
+        } else if (this.x_acc < 0) {
+            this.x_acc += ACC_VALUE / 2;
+            if (this.x_acc > -1) this.x_acc = 0
+            this.x += this.x_acc;
+            if (this.x < this.fontSize / 2 && this.isWall) {
+                this.x = this.fontSize / 2;
+                this.x_acc *= (-1 / 2)
+            }
+        }
+
+        if (this.y_acc > 0) {
+            this.y_acc -= ACC_VALUE / 2;
+            if (this.y_acc < 1) this.y_acc = 0
+            this.y += this.y_acc;
+
+            if (this.y + (this.fontSize / 2) > window.innerHeight
+            && this.isWall) {
+                this.y = window.innerHeight - (this.fontSize / 2);
+                this.y_acc *= (-1 / 2)
+            }
+        } else if (this.y_acc < 0) {
+            this.y_acc += ACC_VALUE / 2;
+            if (this.y_acc > -1) this.y_acc = 0
+            this.y += this.y_acc;
+            if (this.y < this.fontSize / 2 && this.isWall) {
+                this.y = this.fontSize / 2;
+                this.y_acc *= (-1 / 2)
             }
         }
     }
+
+
 
 
     destory() {
         if (this.life >= 0) {
-            this.life += 1;
-            if (this.life > MAX_LIFE * 0.9 && this.life < MAX_LIFE) {
-                this.size = this.size * 0.8
-                this.y -= this.size * 0.2
-            } else if (this.life > MAX_LIFE) {
+            this.life -= 1;
+            if (this.life < 60 && this.life >= 0) {
+                this.rotateDie();
+
+            } else if (this.life > this.maxLife) {
                 this.life = -1;
             }
         }
     }
 
+    vibe() {
+        if (this.vibeLevel === undefined) this.vibeLevel = 0
+        if (this.vibeLevel === 0) {
+            this.y -= 5
+            this.vibeLevel += 1
+        }
+        else if(this.vibeLevel === 5){
+            this.y += 5
+            this.vibeLevel += 1
+        }else if(this.vibeLevel === 10){
+            this.vibeLevel = 0
+        }else{
+            this.vibeLevel += 1
+        }
+
+        if(this.life<90){
+            this.isVibe=false;
+        }
+    }
+
+    scaleOut(){
+        this.fontSize = this.fontSize * 0.8
+        this.y -= this.fontSize * 0.2
+    }
+    
+    rotateDie(){
+        this.rotate += 2;
+        this.y_acc+=2;
+
+    }
+
+    fadeIn() {
+        const opacity = (this.maxLife - this.life) / 30;
+        if (opacity > 1) this.isFadeIn = false;
+        this.ctx.globalAlpha = opacity
+    }
+
+    die(){
+        if(this.life>60){
+            this.life =60
+            this.isVibe = false;
+        }
+    }
+
+
+}
+
+
+function detect(obj1, obj2) {
+    const x = obj1.x - obj2.x
+    const y = obj1.y - obj2.y
+    const distance = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))) * 1.2
+    if (distance < (obj1.fontSize / 2) + (obj2.fontSize / 2)) {
+        const radian = Math.atan2(y, x);
+        obj1.x_acc = Math.sin(radian + Math.PI / 2) * obj1.crush_acc
+        obj1.y_acc = Math.cos(radian - Math.PI / 2) * obj1.crush_acc
+        obj1.die();
+        obj2.die();
+    }
 }
