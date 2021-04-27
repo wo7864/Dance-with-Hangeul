@@ -10,57 +10,45 @@ window.onload = () => {
     const objs = [];
 
     ctx.globalAlpha = 1
+    //ctx.fillStyle = "#000";
     ctx.fillStyle = "#000";
-
     let removeList
     let cooltime = 0;
+
+    /**** color Params *****/
+    const colorSet = [
+        ["#ffffff", '#aaaaaa'],
+        ["#ffc107", "#80bdff", "#ff9800"],
+    ]
+    const colorIndex =1
+
+
     const step = () => {
         requestAnimationFrame((timestamp) => {
              if(cooltime <= 0){
-                 if(objs.length<12){
-                    const acc = 10
-                    const groupId = timestamp
+                 if(objs.length<20){
                     const params = {
                         ctx: ctx,
-                        groupId:groupId,
-                        text: 'ㅋ',
-                        fontSize: getRandomInt(150, 160),
+                        text: '반짝',
+                        fontSize: Math.random() < 0.8 ? getRandomInt(10, 50) : getRandomInt(80, 150),
                         fontFamily: 'Nanum Myeongjo',
-                        opacity: 1,
-                        color: '#fff',
-                        x: getRandomInt(100, window.innerWidth),
+                        opacity: 0,
+                        color: colorSet[colorIndex][getRandomInt(0, colorSet[colorIndex].length)],
+                        x: getRandomInt(200, window.innerWidth-200),
                         y: getRandomInt(100, window.innerHeight),
-                        life: 180,
-                        isGravity: false,
+                        x_acc:getRandomInt(10,50)/-50,
+                        life: 300,
+                        finLife:60,
                         isFadeIn: true,
                         isDetect: true,
-                        isVibe: true,
-                        isWall:false,
-                        isRotateDie: true,
-                        x_acc: acc,
-                        y_acc: -acc,
-                        crush_acc:10,
+                        crush_acc:2,
                         rotate: getRandomInt(-20, 20),
+                        isBlur:Math.random() > 0.3 ? true : false 
                     }
-                    const params2 = {
-                        ...params,
-                        x_acc: 0,
-                        y_acc: -acc * 1.3,
-                        rotate: getRandomInt(-20, 20),
-                    }
-                    const params3 = {
-                        ...params,
-                        x_acc: -acc,
-                        y_acc: -acc,
-                        rotate: getRandomInt(-20, 20),
-                    }
-                    const k1 = new Hangul(params)
-                    const k2 = new Hangul(params2)
-                    const k3 = new Hangul(params3)
+
+                    const k1 = new Banjjag(params)
                     objs.push(k1)
-                    objs.push(k2)
-                    objs.push(k3)
-                     cooltime = getRandomInt(30, 60);
+                     cooltime = getRandomInt(5, 20);
                  }
              }else{
                  cooltime -=1;
@@ -74,9 +62,8 @@ window.onload = () => {
 
                 objs.forEach((k, idx) => {
                     if (k === koong) return;
-                    console.log(k.groupId != koong.groupId)
 
-                    if (k.isDetect && k.groupId != koong.groupId) detect(koong, k)
+                    if (k.isDetect) k.detect(koong, k)
                 })
 
                 

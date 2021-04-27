@@ -18,7 +18,7 @@ class Hangul {
         this.ctx = props.ctx;
 
         this.groupId = props.groupId
-        
+
         this.text = props.text
         this.fontSize = props.fontSize
         this.fontFamily = props.fontFamily
@@ -33,6 +33,7 @@ class Hangul {
         this.crush_acc = props.crush_acc;
         this.maxLife = props.life;
         this.life = props.life;
+        this.finLife = props.finLife
 
         /* Function 적용 여부 */
         this.isWall = props.isWall;
@@ -52,7 +53,7 @@ class Hangul {
         this.fontSize = this.fontSize ? this.fontSize : getRandomInt(MIN_FONT_SIZE, MAX_FONT_SIZE);
         this.x = this.x ? this.x : getRandomInt(this.fontSize / 2, window.innerWidth - this.fontSize / 2);
         this.y = this.y ? this.y : 0;
-        this.y_acc = this.y_acc ? this.y_acc : getRandomInt(5, 15);
+        this.y_acc = this.y_acc ? this.y_acc : 0;
         this.x_acc = this.x_acc ? this.x_acc : 0;
         this.life = this.life ? this.life : 300;
     }
@@ -71,6 +72,7 @@ class Hangul {
             this.ctx.fill();
         }
 
+        this.ctx.globalAlpha = this.opacity;
         this.ctx.fillStyle = this.color;
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
@@ -129,7 +131,7 @@ class Hangul {
             this.y += this.y_acc;
 
             if (this.y + (this.fontSize / 2) > window.innerHeight
-            && this.isWall) {
+                && this.isWall) {
                 this.y = window.innerHeight - (this.fontSize / 2);
                 this.y_acc *= (-1 / 2)
             }
@@ -147,59 +149,31 @@ class Hangul {
 
 
 
-    destory() {
+    destory(addFunc) {
         if (this.life >= 0) {
             this.life -= 1;
-            if (this.life < 60 && this.life >= 0) {
-                this.rotateDie();
-
-            } else if (this.life > this.maxLife) {
-                this.life = -1;
+            if (this.life < this.finLife && this.life >= 0) {
+                addFunc();
             }
         }
     }
 
-    vibe() {
-        if (this.vibeLevel === undefined) this.vibeLevel = 0
-        if (this.vibeLevel === 0) {
-            this.y -= 5
-            this.vibeLevel += 1
-        }
-        else if(this.vibeLevel === 5){
-            this.y += 5
-            this.vibeLevel += 1
-        }else if(this.vibeLevel === 10){
-            this.vibeLevel = 0
-        }else{
-            this.vibeLevel += 1
-        }
 
-        if(this.life<90){
-            this.isVibe=false;
-        }
+    scaleOut() {
+        this.fontSize = this.fontSize /60
+        this.opacity = this.life / 60
     }
 
-    scaleOut(){
-        this.fontSize = this.fontSize * 0.8
-        this.y -= this.fontSize * 0.2
-    }
-    
-    rotateDie(){
-        this.rotate += 2;
-        this.y_acc+=2;
-
-    }
 
     fadeIn() {
         const opacity = (this.maxLife - this.life) / 30;
         if (opacity > 1) this.isFadeIn = false;
-        this.ctx.globalAlpha = opacity
+        this.opacity = opacity
     }
 
-    die(){
-        if(this.life>60){
-            this.life =60
-            this.isVibe = false;
+    die(life) {
+        if (this.life > life) {
+            this.life = life
         }
     }
 
