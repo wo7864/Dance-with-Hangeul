@@ -1,16 +1,8 @@
 
 class kkk extends Hangul {
-    ctx;
-    size;
-    padding;
-    x;
-    y;
-    y_acc;
-    x_acc;
-    life;
+
     constructor(props) {
         super(props);
-        
         this.text = 'ㅋ'
        
     }

@@ -1,5 +1,4 @@
 const FONT = 'Nanum Myeongjo'
-const BOTTOM = window.innerHeight
 const MAX_FONT_SIZE = 500;
 const MIN_FONT_SIZE = 150;
 const ACC_VALUE = 1;
@@ -89,6 +88,15 @@ class Hangul {
         this.destory();
     }
 
+    drawPadding() {
+        this.ctx.save();
+        this.ctx.fillStyle = "#666";
+        this.ctx.beginPath()
+        this.ctx.arc(this.x, this.y, this.fontSize / 2, 0, Math.PI * 2)
+        this.ctx.fill();
+        this.ctx.restore();
+    }
+
     gravity() {
         if (BOTTOM > this.y + this.fontSize / (2) || this.y_acc < -1) {
             this.y_acc += ACC_VALUE;
@@ -160,7 +168,7 @@ class Hangul {
 
 
     scaleOut() {
-        this.fontSize = this.fontSize /60
+        this.fontSize = this.fontSize / 60
         this.opacity = this.life / 60
     }
 

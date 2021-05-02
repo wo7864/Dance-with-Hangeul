@@ -1,54 +1,54 @@
 
-window.onload = () => {
+class Canvas__Koong extends HangulCanvas {
 
-    const canvas = document.querySelector('#c')
-    const ctx = canvas.getContext('2d');
-    ctx.textAlign = "center"
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    init() {
+        super.init();
+        this.ctx.globalAlpha = 1
+        this.ctx.fillStyle = "#fff";
+    }
 
-    const objs = [];
-
-
-
-    let removeList
-    let cooltime = 0;
-    const step = () => {
-        requestAnimationFrame(() => {
-             if(cooltime <= 0){
-                 if(objs.length<5){
+    start() {
+        const objs = [];
+        let removeList
+        let cooltime = 0;
+        const colors = ["#ffc107", "#80bdff", "#ff9800"]
+        const step = (timestamp) => {
+            if (cooltime <= 0) {
+                if (objs.length < 5) {
 
                     const params = {
-                        ctx:ctx,
-                        text:'ㅋ',
-                        fontSize:getRandomInt(MIN_FONT_SIZE, MAX_FONT_SIZE),
-                        fontFamily:'Nanum Myeongjo',
-                        color:'#fff',
-                        x:getRandomInt(this.fontSize/2, window.innerWidth - this.fontSize/2),
-                        y:0,
-                        life:300,
+                        ctx: this.ctx,
+                        text: 'ㅋ',
+                        fontSize: getRandomInt(MIN_FONT_SIZE, MAX_FONT_SIZE),
+                        fontFamily: 'Nanum Myeongjo',
+                        color: '#fff',
+                        x: getRandomInt(this.fontSize / 2, window.innerWidth - this.fontSize / 2),
+                        y: 0,
+                        y_acc:10,
+                        crush_acc:30,
+                        life: 300,
                     }
 
-                     objs.push(new Hangul(params))
-                     cooltime = getRandomInt(30, 120);
-                 }
-             }else{
-                 cooltime -=1;
-             }
+                    objs.push(new Koong(params))
+                    cooltime = getRandomInt(30, 60);
+                }
+            } else {
+                cooltime -= 1;
+            }
 
-            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-            ctx.fillStyle = "#000";
-            ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+            this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            this.ctx.fillStyle = "#000";
+            this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
             removeList = [];
             objs.forEach((koong, index) => {
                 if (koong.life === -1) removeList.push(index);
 
                 objs.forEach((k, idx) => {
                     if (k === koong) return;
-                    detect(koong, k)
+                    k.detect(koong, k)
                 })
-                
-                if(koong.isGravity) koong.gravity();
+
+                if (koong.isGravity) koong.gravity();
                 koong.move();
                 koong.draw();
                 koong.destory();
@@ -57,33 +57,13 @@ window.onload = () => {
             removeList.forEach(index => {
                 objs.splice(index, 1);
             })
-            step();
-        })
+            this.animation = requestAnimationFrame(step);
+
+        }
+        this.animation = requestAnimationFrame(step);
     }
-    step();
 
 
-    // document.addEventListener('click', (e) => {
-    //     const params = {
-    //         ctx: ctx,
-    //         text: 'ㅋ',
-    //         fontSize: getRandomInt(MIN_FONT_SIZE, MAX_FONT_SIZE),
-    //         fontFamily: 'Nanum Myeongjo',
-    //         color: '#fff',
-    //         x: getRandomInt(this.fontSize / 2, window.innerWidth - this.fontSize / 2),
-    //         y: 0,
-    //         life: 300,
-    //         isGravity:false,
-    //     }
-
-    //     koong = new Hangul(params)
-    //     koong.draw()
-    //     objs.push(koong)
-    // })
-
-    document.addEventListener('mousemove', (e) => {
-        objs.forEach(koong => {
-            //koong.detect(e.clientX, e.clientY)
-        })
-    })
 }
+
+

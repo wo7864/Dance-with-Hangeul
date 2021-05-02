@@ -1,46 +1,42 @@
+class Canvas__kkk extends HangulCanvas{
 
-window.onload = () => {
+    init(){
+        super.init();
+        this.ctx.globalAlpha = 1
+        this.ctx.fillStyle = "#fff";
+    }
 
-    const canvas = document.querySelector('#c')
-    const ctx = canvas.getContext('2d');
-    ctx.textAlign = "center"
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    start() {
+        const objs = [];
+        let removeList
+        let cooltime = 0;
+        const colors = ["#ffc107", "#80bdff", "#ff9800"]
+        const step = (timestamp) => {
 
-    const objs = [];
-
-    ctx.globalAlpha = 1
-    //ctx.fillStyle = "#000";
-    ctx.fillStyle = "#fff";
-    let removeList
-    let cooltime = 0;
-    const colors = ["#ffc107", "#80bdff", "#ff9800"]
-    const step = () => {
-        requestAnimationFrame((timestamp) => {
-             if(cooltime <= 0){
-                 if(objs.length<12){
+            if (cooltime <= 0) {
+                if (objs.length < 12) {
                     const acc = 10
                     const groupId = timestamp
                     const params = {
-                        ctx: ctx,
-                        groupId:groupId,
+                        ctx: this.ctx,
+                        groupId: groupId,
                         text: 'ㅋ',
                         fontSize: getRandomInt(150, 160),
                         fontFamily: 'Nanum Myeongjo',
                         opacity: 1,
                         color: colors[getRandomInt(0, 3)],
-                        x: getRandomInt(200, window.innerWidth-200),
+                        x: getRandomInt(200, window.innerWidth - 200),
                         y: getRandomInt(300, window.innerHeight),
                         life: 180,
                         isGravity: false,
                         isFadeIn: true,
                         isDetect: true,
                         isVibe: true,
-                        isWall:false,
+                        isWall: false,
                         isRotateDie: true,
                         x_acc: acc,
                         y_acc: -acc,
-                        crush_acc:10,
+                        crush_acc: 10,
                         rotate: getRandomInt(-20, 20),
                     }
                     const params2 = {
@@ -55,20 +51,20 @@ window.onload = () => {
                         y_acc: -acc,
                         rotate: getRandomInt(-20, 20),
                     }
-                    const k1 = new Hangul(params)
-                    const k2 = new Hangul(params2)
-                    const k3 = new Hangul(params3)
+                    const k1 = new kkk(params)
+                    const k2 = new kkk(params2)
+                    const k3 = new kkk(params3)
                     objs.push(k1)
                     objs.push(k2)
                     objs.push(k3)
-                     cooltime = getRandomInt(30, 60);
-                 }
-             }else{
-                 cooltime -=1;
-             }
+                    cooltime = getRandomInt(30, 60);
+                }
+            } else {
+                cooltime -= 1;
+            }
 
-            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-            ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+            this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
             removeList = [];
             objs.forEach((koong, index) => {
                 if (koong.life === -1) removeList.push(index);
@@ -79,64 +75,18 @@ window.onload = () => {
                     if (k.isDetect && k.groupId != koong.groupId) detect(koong, k)
                 })
 
-                
+
                 koong.draw();
             })
             removeList = removeList.reverse()
             removeList.forEach(index => {
                 objs.splice(index, 1);
             })
-            step();
-        })
+            this.animation = requestAnimationFrame(step);
+
+        }
+        this.animation = requestAnimationFrame(step);
     }
-    step();
 
 
-    // document.addEventListener('click', (e) => {
-    //     const acc = 10
-    //     const params = {
-    //         ctx: ctx,
-    //         text: 'ㅋ',
-    //         fontSize: getRandomInt(150, 160),
-    //         fontFamily: 'Nanum Myeongjo',
-    //         opacity: 1,
-    //         color: '#fff',
-    //         x: e.clientX,
-    //         y: e.clientY,
-    //         life: 180,
-    //         isGravity: false,
-    //         isFadeIn: true,
-    //         isDetect: false,
-    //         isVibe: true,
-    //         isWall:false,
-    //         isRotateDie: true,
-    //         x_acc: acc,
-    //         y_acc: -acc,
-    //         rotate: getRandomInt(-20, 20),
-    //     }
-    //     const params2 = {
-    //         ...params,
-    //         x_acc: 0,
-    //         y_acc: -acc * 1.3,
-    //         rotate: getRandomInt(-20, 20),
-    //     }
-    //     const params3 = {
-    //         ...params,
-    //         x_acc: -acc,
-    //         y_acc: -acc,
-    //         rotate: getRandomInt(-20, 20),
-    //     }
-    //     const k1 = new Hangul(params)
-    //     const k2 = new Hangul(params2)
-    //     const k3 = new Hangul(params3)
-    //     objs.push(k1)
-    //     objs.push(k2)
-    //     objs.push(k3)
-    // })
-
-    document.addEventListener('mousemove', (e) => {
-        objs.forEach(koong => {
-            //koong.detect(e.clientX, e.clientY)
-        })
-    })
 }
