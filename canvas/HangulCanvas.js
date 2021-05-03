@@ -7,7 +7,7 @@ class HangulCanvas {
         - 최대 글자 개수
         - 글자 생성 주기
     */
-    constructor(props={}) {
+    constructor(props = {}) {
         this.backgroundColor = props.backgroundColor ? props.backgroundColor : '#000';
         this.color = props.color ? props.color : '#fff';
 
@@ -38,7 +38,7 @@ class HangulCanvas {
             return this.color;
         }
     }
-    getParams(){
+    getParams() {
         return {
             ctx: this.ctx,
             text: 'ㅇ',
@@ -54,18 +54,18 @@ class HangulCanvas {
         }
     }
 
-    createObject(){
-        this.cooltime +=1;
-        if(this.cooltime < this.maxCooltime) return;
-        if(this.objects.length >= 10) return;
+    createObject() {
+        this.cooltime += 1;
+        if (this.cooltime < this.maxCooltime) return;
+        if (this.objects.length >= this.maxObjectCount) return;
         this.objects.push(new this.HangulClass(this.getParams()))
         this.cooltime = 0;
     }
 
-    createObjects(){
-        this.cooltime +=1;
-        if(this.cooltime < this.maxCooltime) return;
-        if(this.objects.length >= 10) return;
+    createObjects() {
+        this.cooltime += 1;
+        if (this.cooltime < this.maxCooltime) return;
+        if (this.objects.length >= this.maxObjectCount) return;
         const params = this.getParams()
         params.forEach(param => {
             this.objects.push(new this.HangulClass(param))
@@ -80,17 +80,19 @@ class HangulCanvas {
     }
 
     detectObjects() {
-        let i = 0, j = 0;
+        let i = 0, j = 1;
         const length = this.objects.length;
         while (i < length - 1) {
-
-            this.objects[i].detect(this.objects[j])
+            if (i !== j) {
+                this.objects[i].detect(this.objects[j])
+            }
 
             j += 1;
             if (j >= length) {
                 j = i + 1;
                 i = i + 1;
             }
+
         }
 
     }
@@ -100,7 +102,7 @@ class HangulCanvas {
             obj.draw();
         })
     }
-    removeObject(){
+    removeObject() {
         this.objects = this.objects.filter(obj => obj.life !== -1)
     }
 

@@ -1,5 +1,5 @@
 
-class Canvas__Koong extends HangulCanvas {
+class Canvas_Koong extends HangulCanvas {
 
     init() {
         super.init();

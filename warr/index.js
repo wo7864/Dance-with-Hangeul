@@ -25,11 +25,8 @@ function setButtonEvent(animationList){
 
 window.onload = () => {
     initCanvas();
-    const animationList = [
-        new Canvas__Koong(), 
-        new Canvas__kkk(),
-        new Canvas__Banjjag(),
-    ]
+    const canvas = new Canvas_Warr()
+    canvas.init();
+    canvas.start();
 
-    setButtonEvent(animationList)
 }

@@ -25,7 +25,7 @@ function setButtonEvent(animationList){
 
 window.onload = () => {
     initCanvas();
-    const canvas = new Canvas__Banjjag()
+    const canvas = new Canvas_Banjjag()
     canvas.init();
     canvas.start();
 

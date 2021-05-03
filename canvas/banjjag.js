@@ -1,4 +1,4 @@
-class Canvas__Banjjag extends HangulCanvas {
+class Canvas_Banjjag extends HangulCanvas {
 
     constructor(props){
         super(props);
