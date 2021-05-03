@@ -1,5 +1,5 @@
 
-class kkk extends Hangul {
+class Kkk extends Hangul {
 
     constructor(props) {
         super(props);
@@ -7,6 +7,7 @@ class kkk extends Hangul {
        
     }
 
+    
     init() {
         this.paddingVisiable = false
 
@@ -140,10 +141,7 @@ class kkk extends Hangul {
         }
     }
 
-    scaleOut(){
-        this.fontSize = this.fontSize * 0.8
-        this.y -= this.fontSize * 0.2
-    }
+
     
     rotateDie(){
         this.rotate += 2;
@@ -164,19 +162,23 @@ class kkk extends Hangul {
         }
     }
 
-
-}
-
-
-function detect(obj1, obj2) {
-    const x = obj1.x - obj2.x
-    const y = obj1.y - obj2.y
-    const distance = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))) * 1.2
-    if (distance < (obj1.fontSize / 2) + (obj2.fontSize / 2)) {
-        const radian = Math.atan2(y, x);
-        obj1.x_acc = Math.sin(radian + Math.PI / 2) * obj1.crush_acc
-        obj1.y_acc = Math.cos(radian - Math.PI / 2) * obj1.crush_acc
-        obj1.die();
-        obj2.die();
+    detect(obj) {
+        if(obj.groupId === this.groupId) return;
+        const x = this.x - obj.x
+        const y = this.y - obj.y
+        const padding_size =1
+        const distance = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))) * padding_size
+        if (distance < (this.fontSize / 2) + (obj.fontSize / 2)) {
+            const radian = Math.atan2(y, x);
+            this.x_acc = Math.sin(radian + Math.PI / 2) * this.crush_acc
+            this.y_acc = Math.cos(radian - Math.PI / 2) *-this.crush_acc
+            //obj.x_acc = Math.sin(radian + Math.PI / 2) * obj.crush_acc
+            //obj.y_acc = Math.cos(radian - Math.PI / 2) * -obj.crush_acc
+            this.die();
+            obj.die();
+        }
     }
+
+    
 }
+
