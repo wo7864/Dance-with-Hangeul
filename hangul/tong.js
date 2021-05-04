@@ -1,10 +1,11 @@
 
-class Koong extends Hangul {
+class Tong extends Hangul {
 
     constructor(props) {
         super(props);
 
-        this.text = '쿵'
+        this.text = '통'
+        this.acc_value =1
     }
 
 
@@ -30,11 +31,11 @@ class Koong extends Hangul {
         const bottom = window.innerHeight
         const sizeGap = (this.fontSize/2)
         if (bottom > this.y + sizeGap || this.y_acc < -1) {
-            this.y_acc += ACC_VALUE;
+            this.y_acc += this.acc_value;
             this.y += this.y_acc;
             if (this.y + sizeGap >= bottom) {
                 this.y = bottom - sizeGap
-                this.y_acc = this.y_acc * (-1 / 2)
+                this.y_acc = this.y_acc * (-3 / 4)
             }
 
         }
@@ -45,21 +46,21 @@ class Koong extends Hangul {
 
     move() {
         if (this.x_acc > 0) {
-            this.x_acc -= ACC_VALUE / 2;
+            this.x_acc -= this.acc_value / 5;
             if (this.x_acc < 1) this.x_acc = 0
             this.x += this.x_acc;
 
             if (this.x + (this.fontSize / 2) > window.innerWidth) {
                 this.x = window.innerWidth - (this.fontSize / 2);
-                this.x_acc *= (-1 / 2)
+                this.x_acc *= (-3 / 4)
             }
         } else if (this.x_acc < 0) {
-            this.x_acc += ACC_VALUE / 2;
+            this.x_acc += this.acc_value / 5;
             if (this.x_acc > -1) this.x_acc = 0
             this.x += this.x_acc;
             if (this.x < this.fontSize / 2) {
                 this.x = this.fontSize / 2;
-                this.x_acc *= (-1 / 2)
+                this.x_acc *= (-3 / 4)
             }
         }
 
@@ -84,14 +85,16 @@ class Koong extends Hangul {
         this.fontSize = this.fontSize * (this.life / 60)
     }
 
-    detect(obj1, obj2) {
-        const x = obj1.x - obj2.x
-        const y = obj1.y - obj2.y
+    detect(obj) {
+        const x = this.x - obj.x
+        const y = this.y - obj.y
         const distance = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))) * 1.2
-        if (distance < (obj1.fontSize / 2) + (obj2.fontSize / 2)) {
+        if (distance < (this.fontSize / 2) + (obj.fontSize / 2)) {
             const radian = Math.atan2(y, x);
-            obj1.x_acc = Math.sin(radian + Math.PI / 2) * obj1.crush_acc
-            obj1.y_acc = Math.cos(radian - Math.PI / 2) * obj1.crush_acc
+            this.x_acc = Math.sin(radian + Math.PI / 2) * this.crush_acc
+            this.y_acc = Math.cos(radian - Math.PI / 2) * this.crush_acc
+            obj.x_acc = Math.sin(radian + Math.PI / 2) * -obj.crush_acc
+            obj.y_acc = Math.cos(radian - Math.PI / 2) * -obj.crush_acc
         }
     }
 
