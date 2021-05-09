@@ -9,6 +9,7 @@ class Warr extends Hangul {
         this.isStop = false;
         this.isRotate = false;
         this.vibe = 1;
+        this.line = props.line;
     }
 
 
