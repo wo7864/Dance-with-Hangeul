@@ -37,7 +37,7 @@ class Canvas_Warr extends HangulCanvas {
         const hangulCount = 7
         const paramsArray = [];
         const fontSize = 100
-        const x = (window.innerWidth/2) - ((fontSize-10)*(hangulCount-1)/2)
+        const x = (window.innerWidth / 2) - ((fontSize - 10) * (hangulCount - 1) / 2)
         const superParams = super.getParams();
         const params = {
             ...superParams,
@@ -56,20 +56,20 @@ class Canvas_Warr extends HangulCanvas {
         let i, j, finLife;
         for (j = 0; j < lineCount; j++) {
             for (i = 0; i < hangulCount; i++) {
-                if(j<2){
-                    finLife = 500 - (100 * j )- getRandomInt(0, 100)
-                }else{
+                if (j < 2) {
+                    finLife = 500 - (100 * j) - getRandomInt(0, 100)
+                } else {
                     finLife = 300
                 }
                 paramsArray.push({
                     ...params,
                     text: Math.random() < 0.33 ? '와' : '르',
-                    x: x + (fontSize-10) * i,
-                    y: 0-(fontSize-10)*j,
-                    line:j,
-                    finLife:finLife,
-                    rotate:getRandomInt(-20, 20),
-                    rotate_acc:getRandomInt(-4, 4)
+                    x: x + (fontSize - 10) * i,
+                    y: 0 - (fontSize - 10) * j,
+                    line: j,
+                    finLife: finLife,
+                    rotate: getRandomInt(-20, 20),
+                    rotate_acc: getRandomInt(-4, 4)
                 })
             }
 
@@ -80,16 +80,11 @@ class Canvas_Warr extends HangulCanvas {
 
     detectObjects() {
         let i, j;
-        let hap;
         const length = this.objects.length;
         for (i = length - 1; i > 0; i--) {
-            if (!this.objects[i].isStop) {
-                hap = 0;
-                for (j = i - 1; j >= 0; j--) {
-                    hap += this.objects[i].detect(this.objects[j])
-                    if (hap > this.objects[i].fontSize) {
-                        this.objects[i].stop();
-                    }
+            for (j = i - 1; j >= 0; j--) {
+                if((i+j) % 2 == 1){
+                    this.objects[i].detect(this.objects[j])
                 }
             }
 

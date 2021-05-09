@@ -4,7 +4,7 @@ class Canvas_Banjjag extends HangulCanvas {
         super(props);
         this.HangulClass = Banjjag;
         this.maxCooltime = 10;
-        this.maxObjectCount = 2;
+        this.maxObjectCount = 20;
     }
     start() {
         const step = () => {
@@ -30,7 +30,7 @@ class Canvas_Banjjag extends HangulCanvas {
             x: getRandomInt(500, window.innerWidth - 400),
             y: getRandomInt(200, window.innerHeight-200),
             x_acc: getRandomInt(10, 30) / -20,
-            life: 400,
+            life: 60,
             finLife: 30,
             isFadeIn: true,
             isDetect: true,
