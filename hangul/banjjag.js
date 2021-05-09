@@ -3,7 +3,7 @@ class Banjjag extends Hangul {
     constructor(props){
         super(props);
         this.isBlur = props.isBlur
-        this.blur = 20
+        this.blur = 40
     }
 
     draw() {
@@ -32,8 +32,11 @@ class Banjjag extends Hangul {
 
 
         this.ctx.fillText(this.text, 0, 0)
-        if(this.isBlur) this.ctx.filter = `blur(${this.blur}px)`;
-        this.ctx.fillText(this.text, 0, 0)
+        if(this.isBlur) {
+            this.ctx.filter = `blur(${this.blur}px)`;
+            this.ctx.fillRect(-this.fontSize/2*2, -this.fontSize/2, this.fontSize*2, this.fontSize)
+        }
+        //this.ctx.fillText(this.text, 0, 0)
 
         this.ctx.restore();
 

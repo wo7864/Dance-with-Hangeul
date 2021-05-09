@@ -37,7 +37,7 @@ class Canvas_Tong extends HangulCanvas {
             x: getRandomInt(this.fontSize / 2, window.innerWidth - this.fontSize / 2),
             y: 0,
             y_acc:10,
-            crush_acc:40,
+            crush_acc:20,
             life: 300,
         }
     }

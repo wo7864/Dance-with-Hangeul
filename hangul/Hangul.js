@@ -174,7 +174,7 @@ class Hangul {
 
 
     fadeIn() {
-        const opacity = (this.maxLife - this.life) / 30;
+        const opacity = (this.maxLife - this.life) / 20;
         if (opacity > 1) this.isFadeIn = false;
         this.opacity = opacity
     }

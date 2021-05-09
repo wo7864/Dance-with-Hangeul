@@ -3,8 +3,8 @@ class Canvas_Banjjag extends HangulCanvas {
     constructor(props){
         super(props);
         this.HangulClass = Banjjag;
-        this.maxCooltime = 15;
-        this.maxObjectCount = 20;
+        this.maxCooltime = 10;
+        this.maxObjectCount = 2;
     }
     start() {
         const step = () => {
@@ -24,14 +24,14 @@ class Canvas_Banjjag extends HangulCanvas {
         return {
             ...params,
             text: '반짝',
-            fontSize: Math.random() < 0.8 ? getRandomInt(20, 40) : getRandomInt(80, 90),
+            fontSize: Math.random() < 0.8 ? getRandomInt(30, 40) : getRandomInt(80, 90),
             fontFamily: 'Nanum Myeongjo',
             opacity: 0,
             x: getRandomInt(500, window.innerWidth - 400),
             y: getRandomInt(200, window.innerHeight-200),
-            x_acc: getRandomInt(10, 30) / -50,
-            life: 100,
-            finLife: 60,
+            x_acc: getRandomInt(10, 30) / -20,
+            life: 400,
+            finLife: 30,
             isFadeIn: true,
             isDetect: true,
             crush_acc: 1.5,
