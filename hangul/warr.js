@@ -26,8 +26,9 @@ class Warr extends Hangul {
 
     draw() {
         if (this.isGravity) this.gravity();
+        if(this.y_acc < -10) this.text = "텅" 
         this.move();
-        if (this.life < this.maxLife - 60 && this.life > this.finLife) {
+        if (this.life < this.maxLife - 60 && this.life > 300) {
             this.x += this.vibe;
             this.vibe *= -1.01;
             if(this.vibe > 10) this.vibe = 10
@@ -139,9 +140,9 @@ class Warr extends Hangul {
 
             const radian = Math.atan2(y, x)+5;
             this.x_acc = Math.sin(radian + Math.PI / 2) * this.crush_acc*5
-            this.y_acc = Math.cos(radian - Math.PI / 2) * this.crush_acc*2
+            this.y_acc = Math.cos(radian - Math.PI / 2) * this.crush_acc*4
             obj.x_acc = Math.sin(radian + Math.PI / 2) * -obj.crush_acc*5
-            obj.y_acc = Math.cos(radian - Math.PI / 2) * -obj.crush_acc*2
+            obj.y_acc = Math.cos(radian - Math.PI / 2) * -obj.crush_acc*4
             this.rotate += this.rotate_acc;
             obj.rotate += this.rotate_acc;
 
