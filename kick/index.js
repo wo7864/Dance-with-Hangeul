@@ -25,7 +25,7 @@ function setButtonEvent(animationList){
 
 window.onload = () => {
     initCanvas();
-    const canvas = new Canvas_Kkk()
+    const canvas = new Canvas_Kick()
     canvas.init();
     canvas.start();
 

@@ -1,9 +1,10 @@
-class Canvas_kkk extends HangulCanvas {
+class Canvas_Kick extends HangulCanvas {
 
     constructor(props) {
         super(props);
-        this.HangulClass = Kkk;
-
+        this.HangulClass = Kick;
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
     }
     init() {
         super.init();
@@ -31,15 +32,16 @@ class Canvas_kkk extends HangulCanvas {
         const acc = 10
         const groupId = new Date();
         const superParams = super.getParams();
+        const paramsArray = [];
         const params = {
             ...superParams,
             groupId: groupId,
             text: 'ㅋ',
-            fontSize: getRandomInt(150, 160),
+            fontSize: getRandomInt(80, 130),
             fontFamily: 'Nanum Myeongjo',
             opacity: 1,
-            x: getRandomInt(200, window.innerWidth - 200),
-            y: getRandomInt(300, window.innerHeight),
+            x: getRandomInt(this.width *0.2, this.width *0.7),
+            y: getRandomInt(this.height *0.3, this.height *0.8),
             life: 180,
             isGravity: false,
             isFadeIn: true,
@@ -50,21 +52,27 @@ class Canvas_kkk extends HangulCanvas {
             x_acc: acc,
             y_acc: -acc,
             crush_acc: 10,
-            rotate: getRandomInt(-20, 20),
+            rotate: getRandomInt(-30, 30),
         }
         const params2 = {
             ...params,
             x_acc: 0,
             y_acc: -acc * 1.3,
-            rotate: getRandomInt(-20, 20),
+            fontSize: getRandomInt(80, 130),
+            rotate: getRandomInt(-30, 30),
         }
         const params3 = {
             ...params,
             x_acc: -acc,
             y_acc: -acc,
-            rotate: getRandomInt(-20, 20),
+            fontSize: getRandomInt(80, 130),
+            rotate: getRandomInt(-30, 30),
         }
-        return [params, params2, params3]
+        paramsArray.push(params)
+        if(Math.random() > 0.5)
+            paramsArray.push(params2)
+        paramsArray.push(params3)
+        return paramsArray
     }
 
 

@@ -1,9 +1,9 @@
 
-class Kkk extends Hangul {
+class Kick extends Hangul {
 
     constructor(props) {
         super(props);
-        this.text = 'ㅋ'
+        this.text = '킥'
        
     }
 
